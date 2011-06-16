@@ -1,0 +1,86 @@
+<html>
+<head>
+<title>JUIC ListView Control Example</title>
+<script type="text/javascript" src="../../../source/scripts/juic.js"></script>
+<link type="text/css" href="../../styles/examples.css" rel="stylesheet"></script>
+</head>
+<body>
+<script type="text/javascript">
+<!--
+var s = TNT.microsecs();
+
+// Create a new ListView control.
+var listView1 = new TNT.Juic.UI.Controls.ListView();
+
+// Set the view to show icon.
+listView1.setView(listView1.VIEW.ICON);
+
+// Allow the user to edit item text.
+listView1.setLabelEdit(true);
+
+// Allow the user to rearrange columns.
+listView1.setColumnReorder(true);
+
+// Display check boxes.
+listView1.setCheckBoxes(true);
+
+// Select the item and subitems when selection is made.
+listView1.setFullRowSelect(true);
+
+// Display grid lines.
+listView1.setGridLines(true);
+
+// Sort the items in the list in ascending order.
+listView1.setSorting(listView1.SORT.ASCENDING);
+
+// Create some items
+for (var i = 0; i < 100; i++) {
+  var item = new TNT.Juic.UI.Controls.ListView.ListViewItem('item'+i);
+
+  /*
+  // Place a check mark next to the item.
+  item.setChecked(true);
+
+  // Create some sub items
+  for (var j = 0; i < 5; i++) {
+    item.subItems.add("1");
+  }
+  */
+
+  listView1.items().add(item);
+}
+
+// Set the columns
+/*
+listView1.columns.add('Item', -2, HorizontalAlignment::Left);
+listView1.columns.add('SubItem 1', -2, HorizontalAlignment::Left);
+listView1.columns.add('SubItem 2', -2, HorizontalAlignment::Left);
+listView1.columns.add('SubItem 3', -2, HorizontalAlignment::Center);
+listView1.columns.add('SubItem 4', -2, HorizontalAlignment::Center);
+listView1.columns.add('SubItem 5', -2, HorizontalAlignment::Center);
+*/
+
+document.write(listView1);
+
+var e = TNT.microsecs();
+
+document.writeln('TNT.JUIC.UI.Controls.ListView took ' + (e - s) + ' ms<br />');
+
+//-->
+</script>
+<div class="listview-form">
+  <form>
+    <select onChange="listView1.setView(this.options[this.selectedIndex].value); return false;">
+      <option value="icon">Large Icons</option>
+      <option value="mini">Small Icons</option>
+      <option value="list">List</option>
+      <option value="tile">Tiles</option>
+      <option value="nail">Thumbnails</option>
+      <option value="grid">Details</option>
+    </select>
+  </form>\
+</div><!-- class="listview-form" -->
+
+</body>
+</html>
+<!-- /* vim: set expandtab tabstop=2 shiftwidth=2: */ -->

@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Object Creation Timing</title>
+<script type="text/javascript" src="../../source/scripts/juic.js"></script>
+<link type="text/css" href="../styles/examples.css" rel="stylesheet"></script>
+</head>
+<body>
+<script type="text/javascript">
+<!--
+var t, i, o, s, e;
+
+t = 0;
+m = 10000;
+for (i = 0; i < m; i++) {
+  s = TNT.microsecs();
+  o = new TNT.Juic.Core.Object();
+  e = TNT.microsecs();
+  t += (e - s);
+}
+
+document.writeln('TNT.JUIC.Core.Objects took an average ' + (t / m) + ' ms to create an object when creating a total of ' + m + ' objects<br />');
+document.writeln('<pre>'+TNT.escapeHTML(TNT.dump(o))+'</pre>');
+//-->
+</script>
+</body>
+</html>
+<!-- /* vim: set expandtab tabstop=2 shiftwidth=2: */ -->

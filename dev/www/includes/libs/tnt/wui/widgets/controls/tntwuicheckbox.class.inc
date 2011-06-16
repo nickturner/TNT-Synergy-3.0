@@ -1,0 +1,139 @@
+<?php
+
+///////////////////////////////////////////////////////////////////////////////
+// TNT-SYNERGY: PHP Application Framework                            v2.0.00 //
+// ======================================                                    //
+//                                                                           //
+// Copyright (c) 2003 by Nick Turner                                         //
+// mail:info@tnt-synergy.com                                                 //
+// http://www.tnt-synergy.com/                                               //
+//                                                                           //
+// TNT-SYNERGY is a PHP Application Framework. It encourages application     //
+// structured application architectures based on the "Model2" version of the //
+// Model View Controller (MVC) design paradigm. The framework supports the   //
+// following key features:                                                   //
+//     - Model                                                               //
+//         - session persistance (PHP Sessions)                              //
+//         - permanent persistance (Database library abstraction)            //
+//         - authentication (Multi-user)                                     //
+//         - authorization (Access control)                                  //
+//         - application model (Object based view of web page)               //
+//     - Control                                                             //
+//        - state processing (Page states)                                   //
+//        - event processing (User supplied events)                          //
+//     - View                                                                //
+//        - themes (application and/or user themes)                          //
+//        - template based presentation (Template library abstraction)       //
+//        - internationalisation (Multi-language support)                    //
+//                                                                           //
+// This program is free software. You can redistribute it and/or modify it   //
+// under the terms of the GNU General Public License as published by the     //
+// Free Software Foundation; either version 2 of the License, or (at your    //
+// option) any later version.                                                //
+//                                                                           //
+//   #####################################################################   //
+//   # This program is distributed in the hope that it will be useful,   #   //
+//   # but WITHOUT ANY WARRANTY; without even the implied warranty of    #   //
+//   # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU #   //
+//   # General Public License for more details.                          #   //
+//   #####################################################################   //
+//                                                                           //
+// TNT-Synergy is a wholly owned subsidiary of TurnerTronics. The project is //
+// open development and is the culmination of many peoples time and effort.  //
+// For a full list of developers and copyrights please refer to CREDITS.TXT  //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Wui CheckBox Class 
+ * ~~~~~~~~~~~~~~~~~~~~
+ *
+ * Represents a generic check box control on a Wui form.
+ *
+ * @package TNT.Wui
+ * @subpackage Controls
+ * @author  Nick Turner <nick@tnt-synergy.com>
+ * @since   21/10/03
+ * @version 2.0
+ */
+
+/*
+ * Dependencies
+ */
+TNTLoader::RequireClass('TNTWuiToggleBox');
+
+/*
+ * Globals
+ */
+global $tnt;
+
+/*
+ * Defines
+ */
+
+/**
+ * The CheckBox class is a ToggleBox with the type preset to 'check'.
+ * state selection.
+ *
+ * <pre>
+ * {tnt_ctrl ctrl="checkbox"
+ *   id="string"
+ *   name="string"
+ *   autopostback="true|false"
+ *   value="string"
+ *   checked="true|false"
+ * }
+ * </pre>
+ *
+ * Use the CheckBox control to allow the user to toggle between a 'checked'
+ * and 'unchecked' state.
+ *
+ * The 'value' property allows you to specify the value the CheckBox should
+ * return when posted in its 'checked' state. When not 'checked' then no
+ * value is posted back.
+ *
+ * Multiple CheckBox controls can be grouped by giving them all the same value
+ * for the 'name' property. When CheckBox controls are grouped then multiple
+ * controls can be 'checked' simultaneously. If you plan to use multiple
+ * CheckBox controls, the CheckBoxList control is an alternative control that
+ * provides convenient data binding capabilities. However, individual CheckBox
+ * controls provide greater control over layout.
+ *
+ * @package TNT.Wui
+ * @subpackage Controls
+ * @access  public
+ * @author  Nick Turner <nick@tnt-synergy.com>
+ *
+ */
+class TNTWuiCheckBox extends TNTWuiToggleBox {
+
+    /**
+     * Construct the control
+     *
+     * This will construct control, initialising all member variables etc.
+     *
+     * @access  public
+     */
+    function TNTWuiCheckBox() {
+
+        TNTWuiToggleBox::TNTWuiToggleBox();
+
+        $this->_type = 'check';
+
+    }
+
+    /**
+     * Destruct the control.
+     *
+     * This will destruct the control and any children.
+     *
+     * @access  private
+     */
+    function _TNTWuiCheckBox() {
+
+    }
+}
+
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+
+?>

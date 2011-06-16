@@ -1,0 +1,114 @@
+<%@taglib prefix="wui" name="tntwui" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Welcome to the Window Widget test suite</title>
+<script type="text/javascript" src="~/scripts/main.js"></script>
+<style>
+{literal}
+body { font-size: 8pt; font-weight: normal; text-decoration: }
+h1 { font-size: 12pt; font-weight: bold; text-decoration: underline; }
+h2 { font-size: 10pt; font-weight: bold; text-decoration: none; margin-bottom: 4px; }
+.widget { background-color: gray; }
+
+.tntwuiwindow table.border {
+  border: 1px solid;
+  border-color:	ThreeDLightShadow ThreeDDarkShadow ThreeDDarkShadow ThreeDLightShadow;
+}
+.tntwuiwindow td.title {
+  height: 15px;
+  background-color: blue;
+}
+.tntwuiwindow td.content {
+  border: 1px solid;
+  border-color:	ThreeDDarkShadow ThreeDLightShadow ThreeDLightShadow ThreeDDarkShadow;
+  background-color: white;
+}
+{/literal}
+</style>
+</head>
+<body>
+<h1>Welcome to the Window Widget test suite</h1>
+
+{capture name="content"}
+<pre>
+TNT-SYNERGY is a PHP Application Framework. It encourages application
+structured application architectures based on the "Model2" version of the
+Model View Controller (MVC) design paradigm. The framework supports the
+following key features:
+    - Model
+        - session persistance (PHP Sessions)
+        - permanent persistance (Database library abstraction)
+        - authentication (Multi-user)
+        - authorization (Access control)
+        - application model (Object based view of web page)
+    - Control
+       - state processing (Page states)
+       - event processing (User supplied events)
+    - View
+       - themes (application and/or user themes)
+       - template based presentation (Template library abstraction)
+       - internationalisation (Multi-language support)      
+</pre>
+{/capture}
+{assign var=content value=$smarty.capture.content}
+
+<p><a href="index.html">Test Index</a></p>
+
+<h2>1) Normal Window widget</h2>
+<div id="widget1" class="widget">
+  <wui:window title="Normal Window" width="300px" height="100px">{$content}</wui:window>
+</div>
+
+<h2>2) Left Aligned Hidden Window widget</h2>
+<div id="widget2" class="widget">
+  <wui:window title="Hidden Scroll Window" width="300px" height="100px" overflow="hidden" align="left">{$content}</wui:window>
+</div>
+
+<h2>3) Right Aligned Scroll Window widget</h2>
+<div id="widget3" class="widget">
+  <wui:window title="Overflow Scroll Window" width="300px" height="100px" overflow="scroll" align="right">{$content}</wui:window>
+</div>
+
+<h2>4) Center Aligned Auto Window widget</h2>
+<div id="widget4" class="widget">
+  <wui:window title="Overflow Auto Window" width="300px" height="100px" overflow="auto" align="center">{$content}</wui:window>
+</div>
+
+<h2>5) Marqee Up Window widget</h2>
+<div id="widget5" class="widget">
+  <wui:window title="Overflow Marquee Up Window" width="300px" height="100px" overflow="marquee-up">{$content}</wui:window>
+</div>
+
+<h2>6) Marqee Down Window widget</h2>
+<div id="widget6" class="widget">
+  <wui:window title="Overflow Marquee Down Window" width="300px" height="100px" overflow="marquee-down">{$content}</wui:window>
+</div>
+
+<h2>7) Marqee Left Window widget</h2>
+<div id="widget7" class="widget">
+  <wui:window title="Overflow Marquee Left Window" width="300px" height="100px" overflow="marquee-left">{$content}</wui:window>
+</div>
+
+<h2>8) Marqee Right Window widget</h2>
+<div id="widget8" class="widget">
+  <wui:window title="Overflow Marquee Right Window" width="300px" height="100px" overflow="marquee-right" style="marquee-speed: 5;">{$content}</wui:window>
+</div>
+
+<h2>9) Collapsable Window widget</h2>
+<div id="widget9" class="widget">
+  <wui:window title="Collapsable/Overflow Hidden Window" width="300px" overflow="hidden" collapsible=true>{$content}</wui:window>
+</div>
+
+<h2>10) Styled Collapsable Window widget</h2>
+<p>style="padding: 10px; margin: 10px; border: 10px #cc0000 solid; overflow: hidden; background-color: #cc00cc; color: #00cc00;)</p>
+<div id="widget10" class="widget">
+  <wui:window title="Collapsable/Overflow Hidden Window" width="300px" overflow="hidden" collapsible="true" style="padding: 10px; margin: 10px; border: 10px #cc0000 solid; overflow: hidden; background-color: #cc00cc; color: #00cc00;">{$content}</wui:window>
+</div>
+
+ 
+</body>
+</html>
+
+<!-- /* vim: set expandtab tabstop=2 shiftwidth=2: */ -->
+

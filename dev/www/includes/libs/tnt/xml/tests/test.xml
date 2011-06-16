@@ -1,0 +1,12 @@
+<page>
+  <form id='form1' name='login'>
+    <action>http://www.fred.com/index.php</action>
+    <label for='username'>Username:</label>
+    <input id='username' name='password' value='fred' />
+    <label for='password'>Password:</label>
+    <input id='password' name='password' value='fred' />
+  </form>
+</page>
+
+<!-- /* vim: set expandtab tabstop=4 shiftwidth=4: */ -->
+

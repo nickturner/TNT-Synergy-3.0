@@ -1,0 +1,46 @@
+<%@taglib prefix="wui" name="tntwui" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Welcome to the Simple Widget test suite</title>
+<style>
+{literal}
+body { font-size: 8pt; font-weight: normal; text-decoration: }
+h1 { font-size: 12pt; font-weight: bold; text-decoration: underline; }
+h2 { font-size: 10pt; font-weight: bold; text-decoration: none; margin-bottom: 4px; }
+#widget1 { background-color: gray; }
+#widget2 { background-color: gray; }
+#widget3 { background-color: gray; }
+{/literal}
+</style>
+</head>
+<body>
+<h1>Welcome to the Simple Widget test suite</h1>
+
+<p><a href="index.html">Test Index</a></p>
+
+<h2>1) Inline widget</h2>
+<div id="widget1"><wui:widget /></div>
+
+<h2>2) Block widget</h2>
+<div id="widget2"><wui:widget>Widgets Contents</wui:widget></div>
+
+<h2>3) Hierarchy</h2>
+<wui:widget id="w1">
+  <wui:widget id="w11">
+    <wui:widget id="w111" />
+    <wui:widget id="w112" />
+    <wui:widget id="w113">
+      <wui:widget id="w1131">
+        <div><code>$w1131->Path() = {$w1131->Path()}</code></div>
+        <div><code>$self->Path() = {$self->Path()}</code></div>
+      </wui:widget>
+    </wui:widget>
+  </wui:widget>
+  <wui:widget id="w12" />
+</wui:widget>
+</body>
+</html>
+
+<!-- /* vim: set expandtab tabstop=4 shiftwidth=4: */ -->
+

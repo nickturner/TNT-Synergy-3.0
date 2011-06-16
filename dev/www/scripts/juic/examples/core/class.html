@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>Class Declaration Tests</title>
+<script type="text/javascript" src="../../source/scripts/juic.js"></script>
+<link type="text/css" href="../styles/examples.css" rel="stylesheet"></script>
+</head>
+<body>
+<script type="text/javascript">
+<!--
+var start = TNT.microsecs();
+
+var test1 = TNT.declareClass({
+  $class : 'test1',
+  $extends : Array,
+
+  constructor : function() {
+    Array.prototype.constructor.call();
+  },
+
+  m1 : function() { return false; },
+
+  m2 : function() { return false; },
+
+  m3 : function() { return false; },
+  
+  m4 : function() { return false; },
+  
+  m5 : function() { return false; }
+
+});
+
+
+var o;
+for (var i = 0; i < 10000; i++) {
+  o = new test1();
+}
+
+var end = TNT.microsecs();
+
+document.writeln('test 1 took ' + (end - start) + ' ms<br />');
+document.writeln('<pre>'+TNT.escapeHTML(TNT.dump(o))+'</pre>');
+
+
+var start = TNT.microsecs();
+
+function test1() {
+  Array.prototype.constructor.call();
+};
+
+test1._extends(Array, 'test1');
+
+proto.m1 = function() { return false; };
+
+proto.m2 = function() { return false; };
+
+proto.m3 = function() { return false; };
+  
+proto.m4 = function() { return false; };
+  
+proto.m5 = function() { return false; };
+
+var o;
+for (var i = 0; i < 10000; i++) {
+  o = new test1();
+}
+
+var end = TNT.microsecs();
+
+document.writeln('test 1 took ' + (end - start) + ' ms<br />');
+document.writeln('<pre>'+TNT.escapeHTML(TNT.dump(o))+'</pre>');
+
+//-->
+</script>
+</body>
+</html>
+<!-- /* vim: set expandtab tabstop=2 shiftwidth=2: */ -->

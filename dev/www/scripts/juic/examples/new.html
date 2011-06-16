@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Native Object Creation Timing</title>
+<script type="text/javascript" src="../source/scripts/juic.js"></script>
+<link type="text/css" href="styles/examples.css" rel="stylesheet"></script>
+</head>
+<body>
+<script type="text/javascript">
+<!--
+function Test() {
+}
+
+var t, i, o, s, e;
+
+t = 0;
+m = 10000;
+for (i = 0; i < m; i++) {
+  s = TNT.microsecs();
+  o = new Test();
+  e = TNT.microsecs();
+  t += (e - s);
+}
+
+document.writeln('Objects took an average of ' + (t / m) + ' ms to create an object when creating a total of ' + m + ' objects<br />');
+//-->
+</script>
+</body>
+</html>
+<!-- /* vim: set expandtab tabstop=2 shiftwidth=2: */ -->

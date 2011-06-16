@@ -1,0 +1,136 @@
+<%@taglib prefix="wui" name="tntwui" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Welcome to the Simple Controls Widget test suite</title>
+<script ctrl="text/javascript" src="~/scripts/main.js"></script>
+<style>
+{literal}
+body { font-size: 8pt; font-weight: normal; text-decoration: }
+h1 { font-size: 12pt; font-weight: bold; text-decoration: underline; }
+h2 { font-size: 10pt; font-weight: bold; text-decoration: none; margin-bottom: 4px; }
+.widget { background-color: gray; }
+{/literal}
+</style>
+</head>
+<body>
+<h1>Welcome to the Simple Controls Widget test suite</h1>
+
+<p><a href="index.html">Test Index</a></p>
+
+<table width="100%" cellpadding="20" border="1">
+  <col width="50%" align="left" valign="top" />
+  <col width="50%" align="left" valign="top" />
+  <tbody><tr><td>
+
+<h2>1) Edit Box Control widget</h2>
+<div id="widget1" class="widget">
+  <wui:editbox name="widget1" cols="20" minLength="1" maxlength="35">
+    <label>Edit Box Control widget</label>
+    <value>1\n2\n3\n4\n5\n6\n</value>
+    <hint>Test single line edit box</hint>
+    <help>Test single line edit box with a minlength of 1 and a maxlength of 35</help>
+    <alert>Validation error</alert>
+    {*
+    <item>
+      <label>Vanilla</label>
+      <value>v</value>
+    </item>
+    <item>
+      <label>Strawberry</label>
+      <value>s</value>
+    </item>
+    <item>
+      <label>Chocolate</label>
+      <value>c</value>
+    </item>
+    *}
+  </wui:editbox>
+</div>
+
+</td><td>
+
+<h2>2) Text Box Control (Single-Line) widget</h2>
+<div id="widget2" class="widget">
+  <wui:textbox name="widget2" cols="20" minLength="1" maxlength="35"
+  value="1\n2\n3\n4\n5\n6\n" />
+</div>
+
+</td></tr><tr><td>
+
+<h2>3) Text Box Control (Multi-Line) widget</h2>
+<div id="widget3" class="widget">
+  <wui:textbox name="widget3" cols="20" rows="5"
+    minLength="1" maxlength="35"
+    value="1\n2\n3\n4\n5\n6\n" />
+</div>
+
+</td><td>
+
+<h2>4) Check Box Control widget</h2>
+<div id="widget4" class="widget">
+  <wui:checkbox name="widget4" value="male" label="Male" labelalign='left' />
+  <wui:checkbox name="widget4" value="female" label="Female" labelalign='left' />
+</div>
+
+</td></tr><tr><td>
+
+<h2>5) Radio Box Control widget</h2>
+<div id="widget5" class="widget">
+  <wui:radiobox name="widget5" value='yes' label='Yes' labelalign='right' />
+  <wui:radiobox name="widget5" value='no' label='No' labelalign='right' />
+</div>
+
+</td><td>
+
+<h2>6) Button Control widget</h2>
+<div id="widget6" class="widget">
+  <wui:button name="widget6" type="submit" label="Submit" />
+  <wui:button name="widget6" type="cancel" label="Cancel" />
+  <wui:button name="widget6" type="reset" label="Reset" />
+</div>
+
+</td></tr><tr><td>
+
+<h2>7) Password Edit widget</h2>
+<div id="widget7" class="widget">
+  <wui:passwordbox name="widget7" value='123456' />
+</div>
+
+</td><td>
+
+<h2>8) Number Edit widget</h2>
+<div id="widget8" class="widget">
+  <wui:numberbox name="widget8" value='123456' />
+</div>
+
+</td></tr><tr><td>
+
+<h2>9) File Upload Control widget</h2>
+<div id="widget9" class="widget">
+  <wui:uploadbox name="widget9" value="123456" />
+</div>
+
+</td><td>
+
+<h2>10) Image Upload Control widget</h2>
+<div id="widget10" class="widget">
+  <wui:uploadbox name="widget10" value="123456" />
+</div>
+
+</td></tr><tr><td>
+
+<h2>11) Tick Box Control widget</h2>
+<div id="widget11" class="widget">
+  <wui:tickbox name="widget11" label="Tick me!" value="123456" />
+</div>
+
+</td><td>
+
+</td></tr></tbody></table>
+
+</body>
+</html>
+
+<!-- /* vim: set expandtab tabstop=2 shiftwidth=2: */ -->
+

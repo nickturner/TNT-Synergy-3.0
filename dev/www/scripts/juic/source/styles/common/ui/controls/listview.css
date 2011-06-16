@@ -1,0 +1,234 @@
+/*
+///////////////////////////////////////////////////////////////////////////////
+// TNT-JUIC: Javascript User Interface Components                    v2.0.01 //
+// ==============================================                            //
+//                                                                           //
+// Copyright (c) 2003 by Nick Turner                                         //
+// mail:info@tnt-juic.com                                                    //
+// http://www.tnt-juic.com/                                                  //
+//                                                                           //
+// TNT-JUIC is an Javascript library of advanced user interface components   //
+// for use on web based forms.                                               //
+//                                                                           //
+// WARNING: This package is protected by copyright law and international     //
+// treaties. Unauthorized reproduction or distribution of this package,      //
+// or any portion of it, may result in severe civil and criminal penalties,  //
+// and will be prosecuted to the maximum extent possible under the law.      //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+*/
+
+/**
+ * TNT.Juic.Core.ListView CSS
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *
+ * Common styles for the ListView control.
+ *
+ * @package TNT.Juic
+ * @subpackage Skins.Common
+ * @author  Nick Turner <nick@tnt-synergy.com>
+ * @since   21/10/03
+ * @version 2.0
+ */
+
+.juic-listviewitem {
+  font: icon; 
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: black;
+  padding: 1px;
+
+}
+
+.juic-listviewitem-icon {
+  font: icon;
+  overflow: hidden;
+}
+
+.juic-listviewitem-name {
+  font: icon;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 1px;
+}
+
+.juic-listviewitem--hover {
+  color: white;
+}
+
+.juic-listviewitem--hover .juic-listviewitem-name {
+  background-color: highlight;
+}
+
+.juic-listviewitem-selected {
+  border: 1px solid gray;
+  padding: 0px;
+  color: white;
+}
+
+.juic-listviewitem-selected .juic-listviewitem-name {
+  background-color: highlight;
+}
+
+.juic-listview-view-icon .juic-listviewitem,
+.juic-listview-view-mini .juic-listviewitem,
+.juic-listview-view-tile .juic-listviewitem,
+.juic-listview-view-nail .juic-listviewitem {
+  float: left;
+}
+
+/*
+ * Views with icon at the top
+ */
+.juic-listview-view-icon .juic-listviewitem,
+.juic-listview-view-nail .juic-listviewitem {
+  text-align: center;
+}
+
+.juic-listview-view-icon .juic-listviewitem-icon,
+.juic-listview-view-nail .juic-listviewitem-icon {
+  display: block;
+  margin: auto auto;
+  text-align: center;
+}
+
+.juic-listview-view-icon .juic-listviewitem-name,
+.juic-listview-view-nail .juic-listviewitem-name {
+  display: inline;
+  margin: auto auto;
+  text-align: center;
+}
+
+/*
+ * Views with icon to the left
+ */
+.juic-listview-view-list .juic-listviewitem-icon,
+.juic-listview-view-tile .juic-listviewitem-icon {
+  display: inline;
+}
+
+.juic-listview-view-list .juic-listviewitem-name,
+.juic-listview-view-tile .juic-listviewitem-name {
+  display: inline;
+}
+
+/*
+ * 'icon' view items are 75px x 75px
+ */
+.juic-listview-view-icon .juic-listviewitem {
+  margin: 1px;
+  height: 73px;
+  width: 73px;
+}
+
+.juic-listview-view-icon .juic-listviewitem-icon {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  height: 32px;
+  width: 32px;
+}
+
+.juic-listview-view-icon .juic-listviewitem-icon img {
+  height: 32px;
+  width: 32px;
+}
+
+/*
+ * 'mini' view items are 17px x 170px
+ */
+.juic-listview-view-mini .juic-listviewitem {
+  margin: 0px;
+  height: 17px;
+  width: 170px;
+  vertical-align: middle;
+}
+
+.juic-listview-view-mini .juic-listviewitem-icon {
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+}
+
+.juic-listview-view-mini .juic-listviewitem-icon img {
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+}
+
+/*
+ * 'list' view items are 17px x unlimited
+ */
+.juic-listview-view-list .juic-listviewitem {
+  margin: 0px;
+  height: 17px;
+  width: auto;
+  vertical-align: middle;
+}
+
+.juic-listview-view-list .juic-listviewitem-icon {
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+}
+
+.juic-listview-view-list .juic-listviewitem-icon img {
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+}
+
+/*
+ * 'tile' view items are 56px x 220px
+ */
+.juic-listview-view-tile .juic-listviewitem {
+  margin: 0px;
+  height:  56px;
+  width: 220px;
+  vertical-align: middle;
+}
+
+.juic-listview-view-tile .juic-listviewitem-icon {
+  margin: 4px;
+  height: 48px;
+  width: 48px;
+  vertical-align: middle;
+}
+
+.juic-listview-view-tile .juic-listviewitem-icon img {
+  height: 48px;
+  width: 48px;
+  vertical-align: middle;
+}
+
+/*
+ * 'nail' view items are 56px x 220px
+ */
+.juic-listview-view-nail .juic-listviewitem {
+  margin: 3px;
+  height: 124px;
+  width: 136px;
+  vertical-align: middle;
+}
+
+.juic-listview-view-nail .juic-listviewitem-icon {
+  margin: 3px;
+  border: 1px solid threedface;
+  height: 97px;
+  width: 97px;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Positioning centers the icon withing the contain element */
+.juic-listview-view-nail .juic-listviewitem-icon span {
+  position: absolute; top: 50%; left: 50%;
+}
+
+.juic-listview-view-nail .juic-listviewitem-icon img {
+  position: relative; top: -50%; left: -50%;
+}
+
+.juic-listview-view-nail .juic-listviewitem--hover .juic-listviewitem-icon {
+  border: 1px solid highlight;
+}

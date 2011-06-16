@@ -1,0 +1,505 @@
+<!--
+///////////////////////////////////////////////////////////////////////////////
+// TNT-JUIC: Javascript User Interface Components                    v2.0.01 //
+// ==============================================                            //
+//                                                                           //
+// Copyright (c) 2003 by Nick Turner                                         //
+// mail:info@tnt-juic.com                                                    //
+// http://www.tnt-juic.com/                                                  //
+//                                                                           //
+// TNT-JUIC is an Javascript library of advanced user interface components   //
+// for use on web based forms.                                               //
+//                                                                           //
+// WARNING: This package is protected by copyright law and international     //
+// treaties. Unauthorized reproduction or distribution of this package,      //
+// or any portion of it, may result in severe civil and criminal penalties,  //
+// and will be prosecuted to the maximum extent possible under the law.      //
+//                                                                           //
+///////////////////////////////////////////////////////////////////////////////
+-->
+<public:component lightWeight="false">
+<public:attach event="onpropertychange" onevent="onPropertyChange()" />
+<public:attach event="onresize" onevent="onResize()" />
+<public:attach event="onbeforeprint" onevent="onBeforePrint()" for="window"/>
+<public:attach event="onafterprint" onevent="onAfterPrint()" for="window"/>
+<script>
+
+/**
+ * TNT.JUIC.Behaviours.PNG Behaviour
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *
+ * Internet Explorer Behaviour to add full alpha transparancy PNG support to
+ * IE 5.5+
+ *
+ * Verions of IE before 7.0 can not handle PNG alpha transparency when used with
+ * the IMG element src or Background-Image style. However versions of IE 5.5+
+ * can use a proprietory filter to display a PNG with alpha transparency under
+ * the elements normal content. This behviour exploits that filter to make
+ * normal HTML elements appear to support full alpha PNGs natively.
+ *
+ * Features:
+ *   + Foreground images (src="x.png")
+ *   + Background images (style="background-image: url(y.png)")
+ *   + Foreground auto sizing (image size need not be specified)
+ *   + Background auto sizing (element size need not be specified)
+ *   + Background positioning (style="background-position: 10px 11px;")
+ *
+ * Limitations:
+ *   + Background repeition is not supported, all backgrounds are treated as
+ *     'no-repeat'
+ *   + Alpha transparencies can not be printed and the original image will be
+ *     printed.
+ *
+ *
+ * @package TNT.JUIC
+ * @subpackage Styles.Common
+ * @author  Nick Turner <nick@tnt-juic.com>
+ * @since   21/10/03
+ * @version 2.0
+ */
+
+
+/*
+ * The real src of an HTML IMG tag has to be set to a transparent image so that
+ * the background filter is seen instead. This is done instead of converting the
+ * IMG tag to a SPAN element so that the DOM is not altered and scripts
+ * expecting an IMG will not notice any change.
+ */
+var blankSrc = "images/blank.gif";  /* Do not use PNG image !! */
+
+
+var isSupported = (navigator.userAgent.match(/MSIE ((5\.5)|[6789])/) && navigator.platform == "Win32");
+var isPrinting = false;
+var isFixing = false;
+
+var bgElement = null;
+var fgSrc = null;
+var bgSrc = null;
+
+function onResize() {
+  fixBgPos();
+}
+
+// Set the width of the element until it reaches the given offsetWidth
+// In CSS1Compat mode the offsetWidth includes the padding and borders but the
+// pixelWidth doesn't so we have to decrease the pixelWidth until the correct
+// offsetWidth is reached
+function setOffsetWidth(obj, width) {
+  obj.style.pixelWidth = width;
+  while (obj.offsetWidth > width && obj.style.pixelWidth > 0 ) {
+    obj.style.pixelWidth--;
+  }
+}
+
+// Set the height of the object so its outer dimensions match that given
+// In CSS1Compat mode the offsetHeight includes the padding and borders but the
+// pixelHeight doesn't so we have to decrease the pixelHeight until the correct
+// offsetHeight is reached
+function setOffsetHeight(obj, height) {
+  obj.style.pixelHeight = height;
+  while (obj.offsetHeight > height && obj.style.pixelHeight > 0 ) {
+    obj.style.pixelHeight--;
+  }
+}
+
+function onPropertyChange() {
+  if (!isSupported || isPrinting || isFixing) {
+    return;
+  }
+
+  isFixing = true;
+ 
+  var name = event.propertyName;
+  if (event.propertyName.substr(0, 6) == 'style.') {
+    var name = event.propertyName.substr(6);
+    //alert('Property changed: ' + element.id + '.style.' + name + '=' + element.style[name]);
+  } else {
+    //alert('Property changed: ' + element.id + '.' + name + '=' + element[name]);
+  }
+
+  switch (event.propertyName) {
+    // These all effect the source of the fg image
+    case 'src':
+      fixFgImg();
+      break;
+
+    // These all effect the source of the bg image
+    case 'style.background':
+    case 'style.backgroundImage':
+      fixBgImg();
+      break;
+
+    // These all effect the style of the bgElement and the position of the bg image
+    case 'style.fontFamily':
+    case 'style.fontSize':
+    case 'style.fontWeight':
+    case 'style.marginTop':
+    case 'style.marginLeft':
+    case 'style.marginRight':
+    case 'style.marginBottom':
+    case 'style.borderStyle':
+    case 'style.borderTopStyle':
+    case 'style.borderLeftStyle':
+    case 'style.borderBottomStyle':
+    case 'style.borderRightStyle':
+    case 'style.borderWidth':
+    case 'style.borderTopWidth':
+    case 'style.borderLeftWidth':
+    case 'style.borderBottomWidth':
+    case 'style.borderRightWidth':
+      syncBgStyle(name);
+      fixBgPos();
+      break;
+
+    // These all effect the position of the bg image
+    case 'offsetWidth':
+    case 'offsetHeight':
+    case 'style.backgroundPosition':
+    case 'style.backgroundPosition':
+    case 'style.backgroundPositionX':
+    case 'style.backgroundPositionY':
+      fixBgPos();
+      break;
+
+    // These all effect the style of the bgElement only
+    case 'style.borderColor':
+    case 'style.borderTopColor':
+    case 'style.borderLeftColor':
+    case 'style.borderBottomColor':
+    case 'style.borderRightColor':
+      syncBgStyle(name);
+      break;
+
+    // These all effect the style of the bgElement only
+    case 'style.zoom':
+      if (bgSrc && !bgElement && element.currentStyle.zoom == 'normal') {
+        element.style.zoom = 1.0;
+      }
+      if (bgElement) {
+        bgElement.style.zoom = element.currentStyle.zoom;
+        element.style.zoom = '';
+        //alert('bgzoom=' + bgElement.currentStyle.zoom);
+      }
+      fixBgPos();
+      break;
+
+    // Reappend our filters
+    case 'style.filter':
+      updateFilters();
+      break;
+
+    // Changing CSS class selectors can cause any CSS style to change
+    case 'className':
+      //alert('this.className is ' + element.className);
+      //alert('this.style.filter is ' + element.currentStyle.filter);
+      //alert('parent.className is ' + element.parentNode.className);
+      //alert('parent.style.filter is ' + element.parentNode.currentStyle.filter);
+      fixBgImg();
+      fixBgPos();
+      updateFilters();
+      break;
+  }
+
+  isFixing = false;
+
+};
+
+function updateFilters() {
+
+  var filters = '';
+
+  var otherFilters = element.currentStyle.filter.replace(/progid:DXImageTransform\.Microsoft\.AlphaImageLoader\(id='_juic(Fg|Bg)PNG',[^\)]*\)/, '');
+
+  if (fgSrc) {
+    filters += "progid:DXImageTransform.Microsoft.AlphaImageLoader(id='_juicFgPNG',src='" + fgSrc + "',sizingMethod='scale') ";
+  }
+
+  if (bgSrc && !bgElement) {
+    filters += "progid:DXImageTransform.Microsoft.AlphaImageLoader(id='_juicBgPNG',src='" + bgSrc + "',sizingMethod='crop') ";
+  }
+
+  element.style.filter = filters + otherFilters;
+
+  if (bgElement) {
+    bgElement.childNodes[0].style.filter =
+      (bgSrc ? "progid:DXImageTransform.Microsoft.AlphaImageLoader(id='_juicBgPNG',src='" + bgSrc + "',sizingMethod='image') " : '') + otherFilters;
+  }
+
+  //alert(element.currentStyle.filter);
+}
+
+function syncBgStyle(style) {
+  if (bgElement) {
+    var rvalue = element.runtimeStyle[style];
+    bgElement.runtimeStyle[style] = '';
+    bgElement.style[style] = element.currentStyle[style];
+    element.runtimeStyle[style] = rvalue;
+  }
+}
+
+function fixFgImg() {
+  if (element.tagName != 'IMG') {
+    return;
+  }
+
+  var src = element.src;
+
+  if (src.match(/\.png$/i)) {
+    // Image is PNG so use foreground filter
+    //alert('element ' + element.id + ' enabling foreground filter: ' + src);
+
+    var width = element.currentStyle.width;
+    var height = element.currentStyle.height;
+
+    // Get full size of image
+    var width = element.width;
+    var height = element.height;
+
+    element.src = blankSrc;
+
+    // Restore image size (as opposed to using the size of the blank image)
+    element.width = width;
+    element.height = height;
+
+    fgSrc = src;
+
+    updateFilters();
+  } else {
+
+    // Image is not PNG so dont use foreground filter
+    //alert('element ' + element.id + ' disabling foreground filter: ' + src);
+
+    fgSrc = null;
+
+    updateFilters();
+  }
+
+}
+
+function fixBgImg() {
+
+  // Clear our overrides so currentStyle returns stylesheet or inline values only
+  element.runtimeStyle.backgroundRepeat = '';
+  element.runtimeStyle.backgroundImage = '';
+
+  if (element.currentStyle.backgroundRepeat != 'no-repeat') {
+    //alert('Repeated PNG backgrounds are not yet supported');
+  }
+
+  var src = element.currentStyle.backgroundImage.replace(/url\(["']?([^\)'"]+)['"]?\)/, '$1');
+
+  if (src.match(/\.png$/i)) {
+    // Image is PNG so use background filter
+    //alert('element ' + element.id + ' enabling background filter: ' + src);
+
+    element.runtimeStyle.backgroundImage = 'none';
+
+    bgSrc = src;
+
+    if (!bgElement) {
+      // Setting the zoom to any value other than 'normal' gives the element layout
+      // and lets the filter work. A value of 1.0 is equivalent to 'normal'.
+      var zoom = element.currentStyle.zoom;
+      element.style.zoom = (zoom == 'normal' ? 1.0 : zoom);
+      //alert(element.id + '.style.zoom=' + element.style.zoom);
+    }
+
+    updateFilters();
+  } else {
+    // Image is not PNG so don't use background filter
+    //alert('element ' + element.id + ' disabling background filter: ' + src);
+
+    bgSrc = null;
+
+    updateFilters();
+  }
+}
+
+function fixBgPos() {
+  if (!bgElement && !bgSrc) {
+    // Background is not filtered
+    return;
+  }
+
+  var x = element.currentStyle.backgroundPositionX;
+  var y = element.currentStyle.backgroundPositionY;
+
+  var nx = parseInt(x);
+  var ny = parseInt(y);
+
+  var hasBgPos = ((nx != 0) || (ny != 0));
+
+  var hasBorder = ((element.currentStyle.borderTopStyle != 'none' &&
+                    parseInt(element.currentStyle.borderTopWidth) != 0) ||
+                   (element.currentStyle.borderBottomStyle != 'none' &&
+                    parseInt(element.currentStyle.borderBottomWidth) != 0) ||
+                   (element.currentStyle.borderLeftStyle != 'none' &&
+                    parseInt(element.currentStyle.borderLeftWidth) != 0) ||
+                   (element.currentStyle.borderRightStyle != 'none' &&
+                    parseInt(element.currentStyle.borderRightWidth) != 0));
+
+  // If the element has a border or background position then we have to create a layer to display
+  // the background image and then place it under this element.
+  if (bgElement || hasBgPos || hasBorder) {
+    if (!bgElement) {
+      if (hasBorder) {
+        //alert('element has border so creating bgElement');
+      } else {
+        //alert('element has bgPos so creating bgElement');
+      }
+
+      var bx = window.document.createElement('span');
+
+      var fg = element;
+      var bg = window.document.createElement('span');
+
+      bx.className = fg.className;
+      bx.style.position = 'relative';
+      bx.style.display = 'inline-block';
+      bx.style.overflow = 'hidden';
+      bx.style.top = 0;
+      bx.style.left = 0;
+      bx.style.fontFamily = fg.currentStyle.fontFamily;
+      bx.style.fontSize = fg.currentStyle.fontSize;
+      bx.style.fontWeight = fg.currentStyle.fontWeight;
+      bx.style.borderWidth = fg.currentStyle.borderWidth;
+      bx.style.borderColor = fg.currentStyle.borderColor;
+      bx.style.borderStyle = fg.currentStyle.borderStyle;
+      bx.style.zoom = fg.currentStyle.zoom;
+      bx.style.margin = fg.currentStyle.margin;
+      bx.style.width = fg.offsetWidth;
+      bx.style.height = fg.offsetHeight;
+      bx.style.setExpression('width', fg.uniqueID + '.offsetWidth');
+      bx.style.setExpression('height', fg.uniqueID + '.offsetHeight');
+
+      bg.style.position = 'absolute';
+      bg.style.display = 'inline-block';
+      bg.style.top = 0;
+      bg.style.left = 0;
+      bg.style.setExpression('width', fg.uniqueID + '.offsetWidth');
+      bg.style.setExpression('height', fg.uniqueID + '.offsetHeight');
+
+      fg.style.position = 'absolute';
+      fg.style.top = 0;
+      fg.style.left = 0;
+
+      element.parentNode.insertBefore(bx, element);
+      bx.appendChild(bg);
+      bx.appendChild(fg);
+
+      // Remove the styles from the element
+      fg.runtimeStyle.borderTopStyle = 'none';
+      fg.runtimeStyle.borderBottomStyle = 'none';
+      fg.runtimeStyle.borderLeftStyle = 'none';
+      fg.runtimeStyle.borderRightStyle = 'none';
+      fg.runtimeStyle.marginTop = '0px';
+      fg.runtimeStyle.marginBottom = '0px';
+      fg.runtimeStyle.marginLeft = '0px';
+      fg.runtimeStyle.marginRight = '0px';
+      fg.style.zoom = '1.0';
+
+
+      bgElement = bx;
+
+      //bgElement.offsetParent.onresize = function() {
+      //  alert('reflowing');
+      //  bgElement.style.overflow = element.currentStyle.overflow;
+      //  bgElement.style.overflow = 'hidden';
+      //}
+
+      updateFilters();
+    } else {
+      // Attempt to reflow the box is its dimensions are auto by hiding the background and
+      // removing the size restraints on the box.
+      //bgElement.style.overflow = element.currentStyle.overflow;
+      //bgElement.style.width = element.currentStyle.width;
+      //bgElement.style.height = element.currentStyle.height;
+
+      //bgElement.style.setExpression('width', element.uniqueID + '.offsetWidth');
+      //bgElement.style.setExpression('height', element.uniqueID + '.offsetHeight');
+      //bgElement.style.overflow = 'hidden';
+    }
+
+    bgElement.className = bgElement.childNodes[1].className;
+
+    var fg_w = bgElement.childNodes[0].offsetWidth;
+    var fg_h = bgElement.childNodes[0].offsetHeight;
+    var bg_w = bgElement.childNodes[1].offsetWidth;
+    var bg_h = bgElement.childNodes[1].offsetHeight;
+
+    var left = 0;
+    switch (x) {
+      case 'left':
+        left = '0px';
+        break;
+      case 'center':
+        left = (bg_w / 2) - (fg_w / 2) + 'px';
+        break;
+      case 'right':
+        left = (bg_w - fg_w) + 'px';
+        break;
+      default:
+        left = (isNaN(nx) ? '0px' : x);
+        break;
+    }
+
+    var top = 0;
+    switch (y) {
+      case 'top':
+        top = '0px';
+        break;
+      case 'center':
+        top = (bg_h / 2) - (fg_h / 2) + 'px';
+        break;
+      case 'bottom':
+        top = (bg_h - fg_h) + 'px';
+        break;
+      default:
+        top = (isNaN(ny) ? '0px' : y);
+        break;
+    }
+
+    bgElement.childNodes[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(id='_juicBgPNG',src='" + bgSrc + "',sizingMethod='image') ";
+    bgElement.childNodes[0].style.top = top;
+    bgElement.childNodes[0].style.left = left;
+  }
+}
+
+function onBeforePrint() {
+  isPrinting = true;
+
+  if (fgSrc) {
+    element.src = fgSrc;
+  }
+
+  if (bgSrc) {
+    element.runtimeStyle.backgroundImage = bgImg;
+  }
+
+  if (bgElement && bgSrc) {
+    bgElement.childNode[0].filters(0).enabled = false;
+  }
+
+  element.runtimeStyle.filter = '';
+}
+
+function onAfterPrint() {
+  isPrinting = false;
+
+  if (bgElement && bgSrc) {
+    bgElement.childNode[0].filters(0).enabled = true;
+  }
+
+  updateFilters();
+}
+
+
+// Actions to take when first added
+if (isSupported) {
+  fixFgImg();
+  fixBgImg();
+  fixBgPos();
+}
+
+</script>
+</public:component>
